@@ -129,7 +129,7 @@ router.post('/users', bodyParser.json(), async(req, res)=>{
                 msg: "The provided email already exists. Please enter another one"
             })
         } else {
-            let generateSalt = await bcrypt.genSalt();
+            let generateSalt = await bcrypt.genSalt(10);
             bd.userPassword = await bcrypt.hash(bd.userPassword, generateSalt);
             console.log(bd);
             // let date = {
@@ -140,7 +140,7 @@ router.post('/users', bodyParser.json(), async(req, res)=>{
 
             const registerQ = `
                 INSERT INTO users(userName, userSurname, userEmail, userPassword)
-                VALUES(?, ?, ?, ?, ? )
+                VALUES(?, ?, ?, ? )
             `
 
             db.query(registerQ, [bd.userName, bd.userSurname, bd.userEmail, bd.userPassword], (err, results)=>{
@@ -154,7 +154,7 @@ router.post('/users', bodyParser.json(), async(req, res)=>{
                     }
                 };
 
-                jwt.sign(payload, process.env.secrect_key, {expiresIn: "12m"}, (err, token)=>{
+                jwt.sign(payload, process.env.jwtSecret, {expiresIn: "365d"}, (err, token)=>{
                     if (err) throw err
                     res.json({
                         status: 200,
@@ -200,7 +200,7 @@ router.patch('/users', bodyParser.json(), (req, res)=>{
                     }
                 };
 
-                jwt.sign(payload, process.env.secrect_key, {expiresIn: "7d"}, (err, token)=>{
+                jwt.sign(payload, process.env.jwtSecret, {expiresIn: "7d"}, (err, token)=>{
                     if (err) throw err
                     res.json({
                         status: 200,
