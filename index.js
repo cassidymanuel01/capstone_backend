@@ -3,7 +3,7 @@ const cors = require('cors');
 const db = require('./config/connection.js');
 require('dotenv').config();
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 
@@ -27,7 +27,7 @@ app.listen(port, ()=> {console.log(`Server is running on port ${port}`)});
 
 // DISPLAY ALL ENDPOINTS
 app.get('/',(req, res)=>{
-    res.sendFile(__dirname + "/view/endpoints.html")
+    res.sendFile( "/view/endpoints.html", {root: __dirname})
 })
 
 //BOOKINGS
