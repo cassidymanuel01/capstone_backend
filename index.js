@@ -78,7 +78,7 @@ router.post('/bookings', bodyParser.json(), (req, res)=>{
 })
 
 
-// DELETE PRODUCT
+// DELETE BOOKING
 router.delete('/bookings/:id', (req, res)=>{
     const deleteBookingQ = `
         DELETE FROM bookings WHERE id = ${req.params.id};
@@ -91,7 +91,7 @@ router.delete('/bookings/:id', (req, res)=>{
     })
 })
 
-// EDIT PRODUCT
+// EDIT BOOKING
 router.put('/bookings/:id', bodyParser.json(), (req, res)=>{
     const editBookingQ = `
         UPDATE bookings
@@ -200,7 +200,7 @@ router.patch('/users', bodyParser.json(), (req, res)=>{
                     }
                 };
 
-                jwt.sign(payload, process.env.jwtSecret, {expiresIn: "7d"}, (err, token)=>{
+                jwt.sign(payload, process.env.jwtSecret, {expiresIn: "365d"}, (err, token)=>{
                     if (err) throw err
                     res.json({
                         status: 200,
