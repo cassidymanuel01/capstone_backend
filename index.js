@@ -17,6 +17,15 @@ app.use((req, res, next)=>{
     next();
 });
 
+app.use(cors({
+    origin: [' http://192.168.8.169:8080', 'http://localhost:8080'],
+    credentials: true
+ }));
+// credentials will allow you to access the cookie on your fetch(url, 
+{
+credentials: 'include'
+}
+
 const router = express.Router();
 
 const port = parseInt(process.env.PORT) || 3000;
@@ -273,3 +282,10 @@ router.put('/users/:id', bodyParser.json(), (req, res)=>{
     })
 
 })
+
+module.exports = {
+    devServer: {
+        Proxy: '*'
+    }
+}
+
