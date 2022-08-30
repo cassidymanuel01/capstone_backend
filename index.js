@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 app.use(
   cors({
     mode: "no-cors",
-    origin: ["http://192.168.9.62:8080", "http://localhost:8080"],
+    origin: ["http://192.168.8.169:8080", "http://localhost:8080"],
     credentials: true,
   })
 );
