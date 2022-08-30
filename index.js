@@ -6,6 +6,11 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
+
+const app = express();
+app.use(express.static('view'));
+
 app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
@@ -13,11 +18,6 @@ app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
 });
-
-const app = express();
-app.use(express.static('view'));
-
-
 
 
 const router = express.Router();
