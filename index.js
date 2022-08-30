@@ -5,14 +5,19 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const app = express();
+app.use(express.static('view'));
 
 app.use(cors({
     origin: [' http://192.168.8.169:8080', 'http://localhost:8080'],
     credentials: true
  }));
- 
-const app = express();
-app.use(express.static('view'));
+
+// credentials will allow you to access the cookie on your fetch(url, 
+{
+credentials: 'include'
+}
+
 app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
@@ -22,10 +27,7 @@ app.use((req, res, next)=>{
 });
 
 
-// credentials will allow you to access the cookie on your fetch(url, 
-{
-credentials: 'include'
-}
+
 
 const router = express.Router();
 
