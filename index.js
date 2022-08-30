@@ -11,8 +11,6 @@ const port = parseInt(process.env.PORT) || 3000;
 
 app.use(router, cors(), express.json(), bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static('views'));
-
 app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
@@ -20,6 +18,8 @@ app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
 });
+
+app.use(express.static('views'));
 
 app.listen(port, ()=> {console.log(`Server is running on port ${port}`)});
 
