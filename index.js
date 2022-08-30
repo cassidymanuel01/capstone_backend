@@ -12,8 +12,8 @@ app.use(express.static('view'))
 app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
-    // res.setHeader('Access-Control-Allow-Methods', '*');
-    // res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', '*');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
 });
 
@@ -36,7 +36,7 @@ app.listen(port, ()=> {console.log(`Server is running on port ${port}`)});
 
 // DISPLAY ALL ENDPOINTS
 app.get('/',(req, res)=>{
-    res.sendFile( "/view/endpoints.html", {root: __dirname})
+    res.sendFile( "/views/endpoints.html", {root: __dirname})
 })
 
 //BOOKINGS
