@@ -5,11 +5,11 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
-
-
 const app = express();
-app.use(express.static('view'));
+const router = express.Router();
+const port = parseInt(process.env.PORT) || 3000;
+
+app.use(express.static('views'));
 
 app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,9 +20,7 @@ app.use((req, res, next)=>{
 });
 
 
-const router = express.Router();
 
-const port = parseInt(process.env.PORT) || 3000;
 
 app.use(router, cors(), express.json(), bodyParser.urlencoded({ extended: true }));
 
