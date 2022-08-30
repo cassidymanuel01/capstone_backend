@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./config/connection.js');
+const db = require('./conn/connection.js');
 require('dotenv').config();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
@@ -202,6 +202,8 @@ router.patch('/users', bodyParser.json(), (req, res)=>{
             } else {
                 const payload = {
                     user: {
+                        userName: results[0].userName,
+                        userSurname: results[0].userSurname,
                         userEmail: results[0].userEmail,
                         userPassword: results[0].userPassword
                     }
