@@ -1,17 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const app = express();
+const router = express.Router();
 const db = require('./conn/connection.js');
-require('dotenv').config();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const app = express();
-const router = express.Router();
 const port = parseInt(process.env.PORT) || 3000;
+
 app.use(router, cors(), express.json(), bodyParser.urlencoded({ extended: true }));
-
-
-
 
 app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,6 +20,7 @@ app.use((req, res, next)=>{
 });
 
 app.use(express.static('views'));
+
 app.listen(port, ()=> {console.log(`Server is running on port ${port}`)});
 
 
