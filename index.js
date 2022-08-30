@@ -9,19 +9,23 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const port = parseInt(process.env.PORT) || 3000;
 
-app.use(router, express.json(), express.urlencoded({ extended: true }));
 
-app.use((req, res, next)=>{
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', '*');
-    res.setHeader('Access-Control-Allow-Methods', '*');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+app.use((req, res, next) => {
+    res.setHeader("mode", "no-cors");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    // res.setHeader("Access-Control-Allow-Headers", "*");
+    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-*", "*");
     next();
 });
 app.use(cors({
-    origin: ['http://127.0.0.1:8080', 'http://localhost:8080'],
+    mode: 'no-cors',
+    origin: ['http://127.0.0.1:8080', 'http://localhost:8080', 'http://192.168.9.62:8080/'],
     credentials: true
 }));
+
+app.use(router, express.json(), express.urlencoded({ extended: true }));
 
 app.use(express.static('views'));
 
