@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const port = parseInt(process.env.PORT) || 3000;
 
-app.use(router, cors(), express.json(), express.urlencoded({ extended: true }));
+app.use(router, express.json(), express.urlencoded({ extended: true }));
 
 app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -18,6 +18,10 @@ app.use((req, res, next)=>{
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
 });
+app.use(cors({
+    origin: ['http://127.0.0.1:8080', 'http://localhost:8080'],
+    credentials: true
+}));
 
 app.use(express.static('views'));
 
