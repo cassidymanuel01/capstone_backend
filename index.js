@@ -1,20 +1,20 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-
+const app = express();
+const router = express.Router();
 const db = require("./conn/connection.js");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const port = parseInt(process.env.PORT) || 3000;
 
-const app = express();
-const router = express.Router();
-
 app.use((req, res, next) => {
+  res.setHeader("mode", "no-cors");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Access-Control-Allow-Methods", "*");
+
   next();
 });
 app.use(
