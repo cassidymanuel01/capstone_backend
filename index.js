@@ -222,42 +222,43 @@ router.patch("/users", bodyParser.json(), (req, res) => {
       });
     } else {
       if (
-        (await bcrypt.compare(
+         bcrypt.compare(
           req.body.userPassword,
           results[0].userPassword
-        )) == false
-      ) {
-        res.json({
+        , (err, veri) =>{
+            if (veri) {
+                const payload = {
+                    user: {
+                      userName: results[0].userName,
+                      userSurname: results[0].userSurname,
+                      userEmail: results[0].userEmail,
+                      userPassword: results[0].userPassword,
+                    },
+                  };
+                  jwt.sign(
+                    payload,
+                    process.env.jwtSecret,
+                    { expiresIn: "365d" },
+                    (err, token) => {
+                      if (err) throw err;
+                      res.json({
+                        status: 200,
+                        user: results,
+                        token: token,
+                      });
+                    }
+                  );
+            } else {
+                res.json({
           status: 404,
           msg: "Password is Incorrect",
         });
-      } else {
-        const payload = {
-          user: {
-            userName: results[0].userName,
-            userSurname: results[0].userSurname,
-            userEmail: results[0].userEmail,
-            userPassword: results[0].userPassword,
-          },
-        };
+         }
+         })
+  );
+}})
+})
 
-        jwt.sign(
-          payload,
-          process.env.jwtSecret,
-          { expiresIn: "365d" },
-          (err, token) => {
-            if (err) throw err;
-            res.json({
-              status: 200,
-              user: results,
-              token: token,
-            });
-          }
-        );
-      }
-    }
-  });
-});
 
 // GET ALL USERS
 router.get("/users", (req, res) => {
