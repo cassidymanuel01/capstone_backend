@@ -9,9 +9,6 @@ const pool = createPool({
     multipleStatements: true,
     connectionLimit: 10
 });
-
-module.exports = pool;
-
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
@@ -20,4 +17,7 @@ module.exports = defineConfig({
     proxy: 'https://capstone-backend-api-1.herokuapp.com/'
   }
 })
+module.exports = pool;
+
+
 
