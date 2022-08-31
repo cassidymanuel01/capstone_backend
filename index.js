@@ -9,20 +9,20 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const port = parseInt(process.env.PORT) || 3000;
 
-// app.use((req, res, next) => {
-//   res.setHeader("mode", "no-cors");
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader("Access-Control-Allow-Headers", "*");
-//   res.setHeader("Access-Control-Allow-Methods", "*");
-//   next();
-// });
-// app.use(
-//   cors({
-//     mode: "no-cors",
-//     origin: ["http://192.168.8.169:8080", "http://localhost:8080"],
-//     credentials: true,
-//   })
-// );
+app.use((req, res, next) => {
+  res.setHeader("mode", "no-cors");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.setHeader("Access-Control-Allow-Methods", "*");
+  next();
+});
+app.use(
+  cors({
+    mode: "no-cors",
+    origin: ["http://192.168.8.169:8080", "http://localhost:8080"],
+    credentials: true,
+  })
+);
 
 app.use(router, express.json(), express.urlencoded({ extended: true }));
 
