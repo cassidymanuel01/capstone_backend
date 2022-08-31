@@ -14,7 +14,6 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Access-Control-Allow-Methods", "*");
-
   next();
 });
 app.use(
@@ -25,7 +24,7 @@ app.use(
   })
 );
 
-app.use(router, express.json(), express.urlencoded({ extended: true }));
+app.use(router, express.json(), router.urlencoded({ extended: true }));
 
 app.use(express.static("views"));
 
