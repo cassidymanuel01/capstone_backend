@@ -73,8 +73,8 @@ router.get("/bookings/:id", (req, res) => {
 router.post("/bookings", bodyParser.json(), (req, res) => {
   let bd = req.body;
   const createBookingQ = `
-        INSERT INTO bookings(prodName,prodDesc,prodPrice,prodImage,prodCategory,users_id)
-        VALUES(?, ?, ?, ?, ?,?)
+        INSERT INTO bookings(prodName,prodDesc,prodPrice,prodImage,prodCategory)
+        VALUES(?, ?, ?, ?, ?)
     `;
 
   db.query(
@@ -84,8 +84,7 @@ router.post("/bookings", bodyParser.json(), (req, res) => {
       bd.prodDesc,
       bd.prodPrice,
       bd.prodImage,
-      bd.prodCategory,
-      bd.users_id,
+      bd.prodCategory
     ],
     (err, results) => {
       if (err) throw err;
@@ -111,7 +110,7 @@ router.delete("/bookings/:id", (req, res) => {
 router.put("/bookings/:id", bodyParser.json(), (req, res) => {
   const editBookingQ = `
         UPDATE bookings
-        SET prodName = ?, prodDesc = ?, prodPrice = ?, prodImage = ?, prodCategory= ?, users_id= ?
+        SET prodName = ?, prodDesc = ?, prodPrice = ?, prodImage = ?, prodCategory= ?
         WHERE id = ${req.params.id}
     `;
 
@@ -122,8 +121,7 @@ router.put("/bookings/:id", bodyParser.json(), (req, res) => {
       req.body.prodDesc,
       req.body.prodPrice,
       req.body.prodImage,
-      req.body.prodCategory,
-      req.body.users_id,
+      req.body.prodCategory
     ],
     (err, results) => {
       if (err) throw err;
@@ -158,12 +156,6 @@ router.post("/users", bodyParser.json(), async (req, res) => {
     } else {
       let generateSalt = await bcrypt.genSalt(10);
       bd.userPassword = await bcrypt.hash(bd.userPassword, generateSalt);
-      console.log(bd);
-      // let date = {
-      //     // date: new Date().toLocaleDateString(),
-      //     date: new Date().toISOString().slice(0, 10)
-      //   };
-      // bd.join_date = date.date;
 
       const registerQ = `
                 INSERT INTO users(userName, userSurname, userEmail, userPassword)
@@ -183,7 +175,6 @@ router.post("/users", bodyParser.json(), async (req, res) => {
               userPassword: bd.userPassword,
             },
           };
-
           jwt.sign(
             payload,
             process.env.jwtSecret,
@@ -193,6 +184,7 @@ router.post("/users", bodyParser.json(), async (req, res) => {
               res.json({
                 status: 200,
                 msg: "Registration Successful",
+                user: results,
                 token: token,
               });
             }
@@ -211,10 +203,8 @@ router.patch("/users", bodyParser.json(), (req, res) => {
   let user = {
     userEmail: req.body.userEmail,
   };
-
   db.query(loginQ, user, async (err, results) => {
     if (err) throw err;
-
     if (results.length === 0) {
       res.json({
         status: 404,
@@ -222,7 +212,7 @@ router.patch("/users", bodyParser.json(), (req, res) => {
       });
     } else {
       if (
-         bcrypt.compare(
+          bcrypt.compare(
           req.body.userPassword,
           results[0].userPassword
         , (err, veri) =>{
