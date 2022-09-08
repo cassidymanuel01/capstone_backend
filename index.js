@@ -73,7 +73,7 @@ router.get("/bookings/:id", (req, res) => {
 router.post("/bookings", bodyParser.json(), (req, res) => {
   let bd = req.body;
   const createBookingQ = `
-        INSERT INTO bookings(prodName,prodDesc,prodPrice,prodImage,prodCategory)
+        INSERT INTO bookings(prodName, prodDesc, prodPrice, prodImage, prodCategory)
         VALUES(?, ?, ?, ?, ?)
     `;
 
@@ -315,6 +315,7 @@ router.put("/users/:id", bodyParser.json(), (req, res) => {
 });
 
 // CART
+
 // GET CART PRODUCTS
 router.get('/users/:id/cart', (req, res)=>{
   const cartQ = `
