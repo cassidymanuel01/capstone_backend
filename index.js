@@ -314,6 +314,157 @@ router.put("/users/:id", bodyParser.json(), (req, res) => {
   );
 });
 
+// CART
+// GET CART PRODUCTS
+router.get('/users/:id/cart', (req, res)=>{
+  const cartQ = `
+      SELECT cart FROM users 
+      WHERE id = ${req.params.id}
+  `
+
+  db.query(cartQ, (err, results)=>{
+      if (err) throw err
+
+      if (results[0].cart !== null) {
+          res.json({
+              status: 200,
+              cart: JSON.parse(results[0].cart)
+          }) 
+      } else {
+          res.json({
+              status: 404,
+              message: 'There is no items in your cart'
+          })
+      }
+  })
+})
+
+
+// ADD PRODUCT TO CART
+router.post('/users/:id/cart', bodyParser.json(),(req, res)=>{
+  let bd = req.body
+  const cartQ = `
+      SELECT cart FROM users 
+      WHERE id = ${req.params.id}
+  `
+
+  db.query(cartQ, (err, results)=>{
+      if (err) throw err
+      if (results.length > 0) {
+          let cart;
+          if (results[0].cart == null) {
+              cart = []
+          } else {
+              cart = JSON.parse(results[0].cart)
+          }
+          let booking = {
+              "id" : cart.length + 1,
+              "prodName" : bd.prodName,
+              "prodCategory" : bd.prodCategory,
+              "prodDesc" : bd.prodDesc,
+              "prodImage" : bd.prodImage,
+              "prodPrice" : bd.prodPrice
+          }
+          cart.push(booking);
+          const query = `
+              UPDATE users
+              SET cart = ?
+              WHERE id = ${req.params.id}
+          `
+
+          db.query(query , JSON.stringify(cart), (err, results)=>{
+              if (err) throw err
+              res.json({
+                  status: 200,
+                  results: 'Appointment booked'
+              })
+          })
+      } else {
+          res.json({
+              status: 404,
+              results: 'There is no user with that ID'
+          })
+      }
+  })
+})
+
+// DELETE CART
+router.delete('/users/:id/cart', (req,res)=>{
+  const delCart = `
+      SELECT cart FROM users 
+      WHERE id = ${req.params.id}
+  `
+  db.query(delCart, (err,results)=>{
+      if(err) throw err;
+      if(results.length >0){
+          const query = `
+              UPDATE users 
+              SET cart = null 
+              WHERE id = ${req.params.id}
+          `
+          db.query(query,(err,results)=>{
+              if(err) throw err
+              res.json({
+                  status:200,
+                  results: `Your Appointment has been cancelled`
+              })
+          });
+      }else{
+          res.json({
+              status:400,
+              result: `There is no user with that ID`
+          });
+      }
+  })
+})
+
+router.delete('/users/:id/cart/:cartId', (req,res)=>{
+      const delSingleCartProd = `
+          SELECT cart FROM users 
+          WHERE id = ${req.params.id}
+      `
+      db.query(delSingleCartProd, (err,results)=>{
+          if(err) throw err;
+
+          if(results.length > 0){
+              if(results[0].cart != null){
+
+                  const result = JSON.parse(results[0].cart).filter((cart)=>{
+                      return cart.cart_id != req.params.cartId;
+                  })
+                  result.forEach((cart,i) => {
+                      cart.cart_id = i + 1
+                  });
+                  const query = `
+                      UPDATE users 
+                      SET cart = ? 
+                      WHERE id = ${req.params.id}
+                  `
+
+                  db.query(query, [JSON.stringify(result)], (err,results)=>{
+                      if(err) throw err;
+                      res.json({
+                          status:200,
+                          result: "Your Appointment has been cancelled"
+                      });
+                  })
+
+              }else{
+                  res.json({
+                      status:400,
+                      result: "You have no Appointments booked"
+                  })
+              }
+          }else{
+              res.json({
+                  status:400,
+                  result: "There is no user with that id"
+              });
+          }
+      })
+
+})
+
 module.exports = {
   devServer: {
     Proxy: "*",
